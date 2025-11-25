@@ -1,0 +1,52 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.routers import devices, sensors, alerts
+from app.config import settings
+
+# Initialize FastAPI app
+app = FastAPI(
+    title="IoT Dashboard API",
+    description="API for IoT Dashboard with device management, sensor data, and alerts",
+    version="1.0.0"
+)
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Include routers
+app.include_router(devices.router, prefix="/api/v1/devices", tags=["devices"])
+app.include_router(sensors.router, prefix="/api/v1/sensors", tags=["sensors"])
+app.include_router(alerts.router, prefix="/api/v1/alerts", tags=["alerts"])
+
+
+@app.get("/")
+async def root():
+    """Root endpoint"""
+    return {
+        "message": "Welcome to IoT Dashboard API",
+        "version": "1.0.0",
+        "docs": "/docs"
+    }
+
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint"""
+    return {"status": "healthy"}
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        "main:app",
+        host=settings.HOST,
+        port=settings.PORT,
+        reload=settings.DEBUG
+    )
+

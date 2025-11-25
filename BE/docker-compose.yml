@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # FastAPI Backend
+  backend:
+    build: .
+    container_name: iot_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=True
+      - DATABASE_URL=postgresql://iot_user:iot_password@db:5432/iot_dashboard
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: iot_postgres
+    environment:
+      - POSTGRES_USER=iot_user
+      - POSTGRES_PASSWORD=iot_password
+      - POSTGRES_DB=iot_dashboard
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: iot_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
+

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import devices, sensors, alerts
+from app.routers import devices, sensors, alerts, websocket
 from app.config import settings
 
 # Initialize FastAPI app
@@ -23,7 +23,7 @@ app.add_middleware(
 app.include_router(devices.router, prefix="/api/v1/devices", tags=["devices"])
 app.include_router(sensors.router, prefix="/api/v1/sensors", tags=["sensors"])
 app.include_router(alerts.router, prefix="/api/v1/alerts", tags=["alerts"])
-
+app.include_router(websocket.router, prefix="/api/v1", tags=["websocket"])
 
 @app.get("/")
 async def root():

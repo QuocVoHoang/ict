@@ -24,6 +24,7 @@ import Devices from "@/components/Devices/Devices"
 import Weather from "@/components/Weather/Weather"
 import Chart from "@/components/Chart/Chart"
 import AlertTab from "@/components/Alert/Alert"
+import WebSocketComponent from "@/components/WebSocketComponent/WebSocketComponent"
 
 export enum TabType {
   overview = "overview",
@@ -97,6 +98,8 @@ export default function Home() {
             </TabsContent>
           </div>
         </Tabs>
+
+        <WebSocketComponent />
       </div>
     </div>
   );

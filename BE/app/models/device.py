@@ -9,6 +9,9 @@ class Device(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False, index=True)
+    metric_name = Column(String, nullable=False, index=True)  # use, gen, microwave, fridge
+    category = Column(String, nullable=False, index=True)  # kitchen, heating, weather
+    sensor_type = Column(String, nullable=False) # power, temperature, humidity, wind
     device_type = Column(String, nullable=False)  # e.g., "sensor", "actuator", "controller"
     location = Column(String)
     status = Column(String, default="active")  # active, inactive, error
@@ -16,13 +19,13 @@ class Device(Base):
     last_seen = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
-    
+
     # Device specific attributes (can be JSON in production)
     ip_address = Column(String)
     mac_address = Column(String, unique=True)
     firmware_version = Column(String)
     battery_level = Column(Float)  # percentage
-    
+
     def __repr__(self):
         return f"<Device(id={self.id}, name='{self.name}', type='{self.device_type}')>"
 

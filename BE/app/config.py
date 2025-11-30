@@ -36,6 +36,13 @@ class Settings(BaseSettings):
     MQTT_PORT: int = 1883
     MQTT_USERNAME: str = ""
     MQTT_PASSWORD: str = ""
+    # Local Kafka
+    #KAFKA_BOOTSTRAP_SERVERS: str = "localhost:9092"
+
+    # Docker Kafka (nếu bạn chạy Kafka qua docker-compose sau này)
+    KAFKA_BOOTSTRAP_SERVERS: str ="kafka:9092"  
+
+    KAFKA_TOPIC: str = "smart_home_raw"
     
     class Config:
         env_file = ".env"

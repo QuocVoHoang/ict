@@ -4,6 +4,7 @@ Run this script to create all tables in the database
 """
 from app.database import engine, Base
 from app.models import Device, SensorData, Alert
+from app.models.weather_reading import WeatherReading
 
 def init_database():
     """Create all tables"""

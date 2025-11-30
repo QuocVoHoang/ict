@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import devices, sensors, alerts, websocket
 from app.config import settings
+import asyncio
+from kafka.consumer import consume
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -40,6 +42,13 @@ async def health_check():
     """Health check endpoint"""
     return {"status": "healthy"}
 
+@app.on_event("startup")
+async def startup_event() -> None:
+    """Start the background polling task on application startup."""
+    # Kick off the polling task as a background task. It will run
+    # indefinitely until the application shuts down. We deliberately
+    # don't await the function to avoid blocking the startup sequence.
+    asyncio.create_task(consume())
 
 if __name__ == "__main__":
     import uvicorn
